@@ -9,6 +9,7 @@
     "postinstall": "npm rebuild sqlite3 bcrypt --build-from-source"
   },
   "dependencies": {
+    "@sendgrid/mail": "^8.1.5",
     "bcryptjs": "^3.0.2",
     "body-parser": "^1.20.3",
     "cors": "^2.8.5",
