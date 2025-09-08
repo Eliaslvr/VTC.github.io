@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VTC Premium - Réservation de Transport</title>
+    <meta name="description" content="Réservez votre VTC en ligne. Transport privé professionnel et ponctuel. Réservation immédiate.">
+    <meta name="keywords" content="vtc, taxi, transport, réservation, chauffeur privé">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="index.js">
+</head>
+<body>
+    <header>
+        <nav class="container">
+            <a href="#" class="logo">🚗 VTC Premium</a>
+            <div class="nav-links">
+                <a href="#reservation">Réserver</a>
+                <a href="#services">Services</a>
+                <a href="#contact">Contact</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container">
+        <section class="hero">
+            <h1>Transport VTC de Qualité</h1>
+            <p>Réservez votre course en ligne - Service professionnel et ponctuel</p>
+        </section>
+
+        <section id="reservation">
+            <div class="booking-form" id="bookingForm">
+                <h2 style="text-align: center; margin-bottom: 2rem; color: #333;">Réserver votre course</h2>
+                <form id="reservationForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="pickup">Adresse de départ *</label>
+                            <input type="text" id="pickup" name="pickup" required placeholder="Ex: Gare de Lyon, Paris">
+                        </div>
+                        <div class="form-group">
+                            <label for="destination">Destination *</label>
+                            <input type="text" id="destination" name="destination" required placeholder="Ex: Aéroport CDG">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="date">Date *</label>
+                            <input type="date" id="date" name="date" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="time">Heure *</label>
+                            <input type="time" id="time" name="time" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="passengers">Nombre de passagers</label>
+                            <select id="passengers" name="passengers">
+                                <option value="1">1 passager</option>
+                                <option value="2">2 passagers</option>
+                                <option value="3">3 passagers</option>
+                                <option value="4">4 passagers</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="serviceType">Type de service</label>
+                            <select id="serviceType" name="serviceType">
+                                <option value="standard">Standard</option>
+                                <option value="premium">Premium</option>
+                                <option value="business">Business</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="name">Nom complet *</label>
+                        <input type="text" id="name" name="name" required placeholder="Votre nom et prénom">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone">Téléphone *</label>
+                        <input type="tel" id="phone" name="phone" required placeholder="06 12 34 56 78">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" placeholder="votre@email.com">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="notes">Informations complémentaires</label>
+                        <textarea id="notes" name="notes" rows="3" placeholder="Commentaires particuliers, numéro de vol, etc."></textarea>
+                    </div>
+
+                    <button type="submit" class="btn">Réserver maintenant</button>
+                </form>
+            </div>
+
+            <div class="confirmation" id="confirmation">
+                <h2>✅ Réservation confirmée !</h2>
+                <p>Merci pour votre réservation. Voici les détails de votre course :</p>
+                
+                <div class="booking-details" id="bookingDetails">
+                    <!-- Les détails seront remplis par JavaScript -->
+                </div>
+                
+                <p><strong>Nous vous contacterons sous peu pour confirmer votre réservation.</strong></p>
+                <p>En cas d'urgence, contactez-nous au : <strong>06 12 34 56 78</strong></p>
+                
+                <button class="btn" onclick="newBooking()">Nouvelle réservation</button>
+            </div>
+        </section>
+
+        <section id="services" class="services">
+            <h2>Nos Services</h2>
+            <div class="service-cards">
+                <div class="service-card">
+                    <h3>🚗 Transport Standard</h3>
+                    <p>Véhicules confortables pour vos déplacements quotidiens. Ponctualité garantie.</p>
+                </div>
+                <div class="service-card">
+                    <h3>✈️ Transfert Aéroport</h3>
+                    <p>Service spécialisé aéroport avec suivi de vol et attente incluse.</p>
+                </div>
+                <div class="service-card">
+                    <h3>💼 Transport Business</h3>
+                    <p>Véhicules haut de gamme pour vos rendez-vous professionnels.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="contact-info">
+            <h2>Contactez-nous</h2>
+            <p>📞 <strong>06 12 34 56 78</strong></p>
+            <p>✉️ <strong>contact@vtcpremium.fr</strong></p>
+            <p>🕒 Disponible 24h/24, 7j/7</p>
+        </section>
+    </main>
+</body>
+</html>
