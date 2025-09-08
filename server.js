@@ -9,9 +9,17 @@ require('dotenv').config();
 const bookingRoutes = require('./src/routes/bookings');
 const adminRoutes = require('./src/routes/admin');
 const { initDatabase } = require('./src/database/db');
+const { testEmailConfiguration } = require('./src/services/emailService');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+// Vérifications au démarrage
+console.log('🔧 Vérification de la configuration...');
+console.log('PORT:', process.env.PORT);
+console.log('FROM_EMAIL:', process.env.FROM_EMAIL);
+console.log('ADMIN_EMAIL:', process.env.ADMIN_EMAIL);
+console.log('SENDGRID_API_KEY:', process.env.SENDGRID_API_KEY ? '✅ Configuré' : '❌ Manquant');
 
 // Middleware de sécurité
 app.use(helmet());
@@ -48,6 +56,25 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/api/bookings', bookingLimiter, bookingRoutes);
 app.use('/api/admin', adminRoutes);
 
+// Route de test pour les emails
+app.get('/api/test-email', async (req, res) => {
+    try {
+        console.log('🧪 Test email demandé...');
+        const success = await testEmailConfiguration();
+        res.json({
+            success,
+            message: success ? 'Email de test envoyé !' : 'Erreur de configuration email'
+        });
+    } catch (error) {
+        console.error('Erreur test email:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Erreur lors du test email',
+            error: error.message
+        });
+    }
+});
+
 // Route pour servir le site principal
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
@@ -74,15 +101,26 @@ app.use('*', (req, res) => {
 async function startServer() {
     try {
         await initDatabase();
-        console.log('Base de données initialisée');
+        console.log('✅ Base de données initialisée');
+        
+        // Test de la configuration email au démarrage
+        console.log('🧪 Test de la configuration SendGrid...');
+        try {
+            await testEmailConfiguration();
+            console.log('✅ Configuration SendGrid validée');
+        } catch (emailError) {
+            console.warn('⚠️ Problème avec la configuration email:', emailError.message);
+            console.warn('   Le serveur va démarrer mais les emails ne fonctionneront pas');
+        }
         
         app.listen(PORT, () => {
             console.log(`🚗 Serveur VTC démarré sur le port ${PORT}`);
             console.log(`📱 Site disponible sur: http://localhost:${PORT}`);
             console.log(`🔧 API disponible sur: http://localhost:${PORT}/api`);
+            console.log(`📧 Test email: http://localhost:${PORT}/api/test-email`);
         });
     } catch (error) {
-        console.error('Erreur lors du démarrage:', error);
+        console.error('❌ Erreur lors du démarrage:', error);
         process.exit(1);
     }
 }
