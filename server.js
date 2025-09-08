@@ -11,7 +11,7 @@ const adminRoutes = require('./src/routes/admin');
 const { initDatabase } = require('./src/database/db');
 
 const app = express();
-const PORT = process.env.PORT || 10000;
+const PORT = process.env.PORT || 3000;
 
 // Middleware de sécurité
 app.use(helmet());
