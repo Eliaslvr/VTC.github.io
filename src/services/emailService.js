@@ -130,10 +130,10 @@ async function sendBookingConfirmation(bookingData, bookingId) {
 async function sendBookingNotification(bookingData, bookingId) {
     try {
         const adminEmail = process.env.ADMIN_EMAIL;
-        if (!adminEmail) {
-            console.log('Email admin non configuré, notification non envoyée');
-            return;
-        }
+        // if (!adminEmail) {
+        //     console.log('Email admin non configuré, notification non envoyée');
+        //     return;
+        // } 
 
         const serviceTypes = {
             'standard': 'Standard',
@@ -251,7 +251,7 @@ async function testEmailConfiguration() {
             to: process.env.ADMIN_EMAIL,
             from: {
                 email: process.env.FROM_EMAIL,
-                name: 'Test VTC'
+                name: 'VTC'
             },
             subject: 'Test de configuration SendGrid',
             html: `
