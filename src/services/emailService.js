@@ -4,12 +4,37 @@ const moment = require('moment');
 // Configuration SendGrid
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
+async function diagnoseEmailConfig() {
+    console.log('🔍 Diagnostic de la configuration email...');
+    
+    // Vérifier les variables d'environnement
+    const config = {
+        apiKey: process.env.SENDGRID_API_KEY ? '✅ Configuré' : '❌ Manquant',
+        fromEmail: process.env.FROM_EMAIL || '❌ Non configuré',
+        adminEmail: process.env.ADMIN_EMAIL || '❌ Non configuré'
+    };
+    
+    console.log('Configuration actuelle:', config);
+    
+    if (!process.env.SENDGRID_API_KEY) {
+        throw new Error('SENDGRID_API_KEY manquante');
+    }
+    
+    if (!process.env.FROM_EMAIL) {
+        throw new Error('FROM_EMAIL manquant');
+    }
+    
+    return config;
+}
+
 // Email de confirmation pour le client
 async function sendBookingConfirmation(bookingData, bookingId) {
     try {
+        await diagnoseEmailConfig();
+
         if (!bookingData.email) {
-            console.log('Pas d\'email client fourni, confirmation non envoyée');
-            return;
+            console.log(`Pas d'email client fourni`);
+            return { success: false, reason: 'no_email' };
         }
 
         const serviceTypes = {
@@ -111,6 +136,10 @@ async function sendBookingConfirmation(bookingData, bookingId) {
             subject: `Confirmation de réservation VTC #${bookingId}`,
             html: emailHtml,
         };
+
+        console.log('📤 Tentative d\'envoi email à:', bookingData.email);
+        console.log('📤 Depuis:', process.env.FROM_EMAIL);
+
 
         await sgMail.send(msg);
         console.log(`✅ Email de confirmation envoyé à ${bookingData.email}`);
