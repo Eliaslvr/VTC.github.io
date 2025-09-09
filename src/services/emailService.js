@@ -28,162 +28,130 @@ async function diagnoseEmailConfig() {
 }
 
 // Email de confirmation pour le client
-// async function sendBookingConfirmation(bookingData, bookingId) {
-//     try {
-//         await diagnoseEmailConfig();
-
-//         // if (!bookingData.email) {
-//         //     console.log(`Pas d'email client fourni`);
-//         //     return { success: false, reason: 'no_email' };
-//         // }
-
-//         const serviceTypes = {
-//             'standard': 'Standard',
-//             'premium': 'Premium',
-//             'business': 'Business'
-//         };
-
-//         const emailHtml = `
-//             <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-//                 <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; text-align: center;">
-//                     <h1 style="margin: 0; font-size: 28px;">🚗 VTC Premium</h1>
-//                     <h2 style="margin: 10px 0 0 0; font-weight: normal;">Confirmation de réservation</h2>
-//                 </div>
-                
-//                 <div style="padding: 30px; background: #f9f9f9;">
-//                     <p style="font-size: 18px; color: #28a745; font-weight: bold;">
-//                         ✅ Votre réservation a été enregistrée avec succès !
-//                     </p>
-                    
-//                     <div style="background: white; padding: 25px; border-radius: 10px; margin: 20px 0;">
-//                         <h3 style="color: #333; margin-top: 0;">Détails de votre course</h3>
-                        
-//                         <table style="width: 100%; border-collapse: collapse;">
-//                             <tr>
-//                                 <td style="padding: 8px 0; font-weight: bold; color: #555;">N° de réservation :</td>
-//                                 <td style="padding: 8px 0;">#${bookingId}</td>
-//                             </tr>
-//                             <tr>
-//                                 <td style="padding: 8px 0; font-weight: bold; color: #555;">Départ :</td>
-//                                 <td style="padding: 8px 0;">${bookingData.pickup}</td>
-//                             </tr>
-//                             <tr>
-//                                 <td style="padding: 8px 0; font-weight: bold; color: #555;">Destination :</td>
-//                                 <td style="padding: 8px 0;">${bookingData.destination}</td>
-//                             </tr>
-//                             <tr>
-//                                 <td style="padding: 8px 0; font-weight: bold; color: #555;">Date :</td>
-//                                 <td style="padding: 8px 0;">${moment(bookingData.date).format('DD/MM/YYYY')}</td>
-//                             </tr>
-//                             <tr>
-//                                 <td style="padding: 8px 0; font-weight: bold; color: #555;">Heure :</td>
-//                                 <td style="padding: 8px 0;">${bookingData.time}</td>
-//                             </tr>
-//                             <tr>
-//                                 <td style="padding: 8px 0; font-weight: bold; color: #555;">Passagers :</td>
-//                                 <td style="padding: 8px 0;">${bookingData.passengers}</td>
-//                             </tr>
-//                             <tr>
-//                                 <td style="padding: 8px 0; font-weight: bold; color: #555;">Service :</td>
-//                                 <td style="padding: 8px 0;">${serviceTypes[bookingData.serviceType]}</td>
-//                             </tr>
-//                             ${bookingData.notes ? `
-//                             <tr>
-//                                 <td style="padding: 8px 0; font-weight: bold; color: #555;">Notes :</td>
-//                                 <td style="padding: 8px 0;">${bookingData.notes}</td>
-//                             </tr>
-//                             ` : ''}
-//                         </table>
-//                     </div>
-                    
-//                     <div style="background: #e8f4fd; padding: 20px; border-radius: 10px; border-left: 4px solid #007bff;">
-//                         <h4 style="margin: 0 0 10px 0; color: #007bff;">📞 Que se passe-t-il maintenant ?</h4>
-//                         <p style="margin: 0; color: #555;">
-//                             Nous allons vous contacter sous peu au <strong>${bookingData.phone}</strong> pour confirmer votre réservation 
-//                             et vous communiquer les détails du chauffeur.
-//                         </p>
-//                     </div>
-                    
-//                     <div style="background: #fff3cd; padding: 20px; border-radius: 10px; border-left: 4px solid #ffc107; margin-top: 15px;">
-//                         <h4 style="margin: 0 0 10px 0; color: #856404;">⚠️ Important</h4>
-//                         <ul style="margin: 0; padding-left: 20px; color: #555;">
-//                             <li>Soyez prêt 5 minutes avant l'heure de prise en charge</li>
-//                             <li>Gardez votre téléphone allumé le jour J</li>
-//                             <li>En cas d'empêchement, contactez-nous au plus tôt</li>
-//                         </ul>
-//                     </div>
-//                 </div>
-                
-//                 <div style="background: #333; color: white; padding: 20px; text-align: center;">
-//                     <h3 style="margin: 0 0 15px 0;">Contact</h3>
-//                     <p style="margin: 5px 0;">📞 <strong>06 12 34 56 78</strong></p>
-//                     <p style="margin: 5px 0;">✉️ <strong>contact@vtcpremium.fr</strong></p>
-//                     <p style="margin: 5px 0; font-size: 14px; opacity: 0.8;">Disponible 24h/24, 7j/7</p>
-//                 </div>
-                
-//                 <div style="padding: 15px; text-align: center; font-size: 12px; color: #888;">
-//                     <p>Merci de votre confiance !</p>
-//                 </div>
-//             </div>
-//         `;
-
-//         const msg = {
-//             to: bookingData.email,
-//             from: {
-//                 email: process.env.FROM_EMAIL,
-//                 name: 'VTC Premium',
-//             },
-//             subject: `Confirmation de réservation VTC #${bookingId}`,
-//             html: emailHtml,
-//         };
-
-//         console.log('📤 Tentative d\'envoi email à:', bookingData.email);
-//         console.log('📤 Depuis:', process.env.FROM_EMAIL);
-
-
-//         await sgMail.send(msg);
-//         console.log(`✅ Email de confirmation envoyé à ${bookingData.email}`);
-
-//     } catch (error) {
-//         console.error('❌ Erreur envoi email confirmation:', error);
-        
-//         if (error.response) {
-//             console.error('Détails de l\'erreur SendGrid:', error.response.body);
-//         }
-        
-//         throw error;
-//     }
-// }
-
-async function sendBookingConfirmation() {
+async function sendBookingConfirmation(bookingData, bookingId) {
     try {
+        await diagnoseEmailConfig();
+
+        // if (!bookingData.email) {
+        //     console.log(`Pas d'email client fourni`);
+        //     return { success: false, reason: 'no_email' };
+        // }
+
+        const serviceTypes = {
+            'standard': 'Standard',
+            'premium': 'Premium',
+            'business': 'Business'
+        };
+
+        const emailHtml = `
+            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+                <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; text-align: center;">
+                    <h1 style="margin: 0; font-size: 28px;">🚗 VTC Premium</h1>
+                    <h2 style="margin: 10px 0 0 0; font-weight: normal;">Confirmation de réservation</h2>
+                </div>
+                
+                <div style="padding: 30px; background: #f9f9f9;">
+                    <p style="font-size: 18px; color: #28a745; font-weight: bold;">
+                        ✅ Votre réservation a été enregistrée avec succès !
+                    </p>
+                    
+                    <div style="background: white; padding: 25px; border-radius: 10px; margin: 20px 0;">
+                        <h3 style="color: #333; margin-top: 0;">Détails de votre course</h3>
+                        
+                        <table style="width: 100%; border-collapse: collapse;">
+                            <tr>
+                                <td style="padding: 8px 0; font-weight: bold; color: #555;">N° de réservation :</td>
+                                <td style="padding: 8px 0;">#${bookingId}</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 8px 0; font-weight: bold; color: #555;">Départ :</td>
+                                <td style="padding: 8px 0;">${bookingData.pickup}</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 8px 0; font-weight: bold; color: #555;">Destination :</td>
+                                <td style="padding: 8px 0;">${bookingData.destination}</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 8px 0; font-weight: bold; color: #555;">Date :</td>
+                                <td style="padding: 8px 0;">${moment(bookingData.date).format('DD/MM/YYYY')}</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 8px 0; font-weight: bold; color: #555;">Heure :</td>
+                                <td style="padding: 8px 0;">${bookingData.time}</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 8px 0; font-weight: bold; color: #555;">Passagers :</td>
+                                <td style="padding: 8px 0;">${bookingData.passengers}</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 8px 0; font-weight: bold; color: #555;">Service :</td>
+                                <td style="padding: 8px 0;">${serviceTypes[bookingData.serviceType]}</td>
+                            </tr>
+                            ${bookingData.notes ? `
+                            <tr>
+                                <td style="padding: 8px 0; font-weight: bold; color: #555;">Notes :</td>
+                                <td style="padding: 8px 0;">${bookingData.notes}</td>
+                            </tr>
+                            ` : ''}
+                        </table>
+                    </div>
+                    
+                    <div style="background: #e8f4fd; padding: 20px; border-radius: 10px; border-left: 4px solid #007bff;">
+                        <h4 style="margin: 0 0 10px 0; color: #007bff;">📞 Que se passe-t-il maintenant ?</h4>
+                        <p style="margin: 0; color: #555;">
+                            Nous allons vous contacter sous peu au <strong>${bookingData.phone}</strong> pour confirmer votre réservation 
+                            et vous communiquer les détails du chauffeur.
+                        </p>
+                    </div>
+                    
+                    <div style="background: #fff3cd; padding: 20px; border-radius: 10px; border-left: 4px solid #ffc107; margin-top: 15px;">
+                        <h4 style="margin: 0 0 10px 0; color: #856404;">⚠️ Important</h4>
+                        <ul style="margin: 0; padding-left: 20px; color: #555;">
+                            <li>Soyez prêt 5 minutes avant l'heure de prise en charge</li>
+                            <li>Gardez votre téléphone allumé le jour J</li>
+                            <li>En cas d'empêchement, contactez-nous au plus tôt</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div style="background: #333; color: white; padding: 20px; text-align: center;">
+                    <h3 style="margin: 0 0 15px 0;">Contact</h3>
+                    <p style="margin: 5px 0;">📞 <strong>06 12 34 56 78</strong></p>
+                    <p style="margin: 5px 0;">✉️ <strong>contact@vtcpremium.fr</strong></p>
+                    <p style="margin: 5px 0; font-size: 14px; opacity: 0.8;">Disponible 24h/24, 7j/7</p>
+                </div>
+                
+                <div style="padding: 15px; text-align: center; font-size: 12px; color: #888;">
+                    <p>Merci de votre confiance !</p>
+                </div>
+            </div>
+        `;
+
         const msg = {
-            to: process.env.ADMIN_EMAIL,
+            to: bookingData.email,
             from: {
                 email: process.env.FROM_EMAIL,
-                name: 'VTC'
+                name: 'VTC Premium',
             },
-            subject: 'Confirmation réservation',
-            html: `
-                <div style="font-family: Arial, sans-serif; padding: 20px;">
-                    <h2>✅ Configuration SendGrid réussie !</h2>
-                    <p>Votre service email fonctionne correctement.</p>
-                    <p>Timestamp: ${new Date().toLocaleString('fr-FR')}</p>
-                </div>
-                `,
+            subject: `Confirmation de réservation VTC #${bookingId}`,
+            html: emailHtml,
         };
+
+        console.log('📤 Tentative d\'envoi email à:', bookingData.email);
+        console.log('📤 Depuis:', process.env.FROM_EMAIL);
+
+
         await sgMail.send(msg);
-        console.log('✅ Configuration SendGrid validée - Email de test 2 envoyé');
-        return true;
-    }
-    catch (error) {
-        console.error('❌ Erreur configuration SendGrid:', error);
+        console.log(`✅ Email de confirmation envoyé à ${bookingData.email}`);
+
+    } catch (error) {
+        console.error('❌ Erreur envoi email confirmation:', error);
         
         if (error.response) {
-            console.error('Détails de l\'erreur:', error.response.body);
+            console.error('Détails de l\'erreur SendGrid:', error.response.body);
         }
         
-        return false;
+        throw error;
     }
 }
 
