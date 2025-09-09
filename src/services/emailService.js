@@ -32,10 +32,10 @@ async function sendBookingConfirmation(bookingData, bookingId) {
     try {
         await diagnoseEmailConfig();
 
-        if (!bookingData.email) {
-            console.log(`Pas d'email client fourni`);
-            return { success: false, reason: 'no_email' };
-        }
+        // if (!bookingData.email) {
+        //     console.log(`Pas d'email client fourni`);
+        //     return { success: false, reason: 'no_email' };
+        // }
 
         const serviceTypes = {
             'standard': 'Standard',
@@ -159,10 +159,10 @@ async function sendBookingConfirmation(bookingData, bookingId) {
 async function sendBookingNotification(bookingData, bookingId) {
     try {
         const adminEmail = process.env.ADMIN_EMAIL;
-        if (!adminEmail) {
-            console.log('Email admin non configuré, notification non envoyée');
-            return;
-        } 
+        // if (!adminEmail) {
+        //     console.log('Email admin non configuré, notification non envoyée');
+        //     return;
+        // } 
 
         const serviceTypes = {
             'standard': 'Standard',

@@ -17,6 +17,8 @@ document.getElementById('reservationForm').addEventListener('submit', function(e
         !bookingData.time || !bookingData.name || !bookingData.phone) {
         alert('Veuillez remplir tous les champs obligatoires.');
         return;
+    } else {
+        alert('Réservation effectué')
     }
     
     // Affichage de la confirmation
