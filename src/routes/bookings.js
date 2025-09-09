@@ -20,34 +20,19 @@ const bookingSchema = Joi.object({
     notes: Joi.string().max(500).allow('')
 });
 
-// Utilitaire pour promisifier db.run
-function runQuery(db, query, params) {
-    return new Promise((resolve, reject) => {
-        db.run(query, params, function(err) {
-            if (err) reject(err);
-            else resolve(this.lastID);
-        });
-    });
-}
-
-// POST - Créer une nouvelle réservation
 router.post('/', async (req, res) => {
-    console.log('📝 Nouvelle demande de réservation reçue');
-    console.log('Données reçues:', JSON.stringify(req.body, null, 2));
-
     try {
-        // Validation
+        // Validation des données
         const { error, value } = bookingSchema.validate(req.body);
         if (error) {
-            console.log('❌ Erreur de validation:', error.details);
             return res.status(400).json({
                 success: false,
                 message: 'Données invalides',
-                errors: error.details.map(d => d.message)
+                errors: error.details.map(detail => detail.message)
             });
         }
 
-        // Vérifier date/heure
+        // Vérifier que la date n'est pas dans le passé
         const bookingDateTime = moment(`${value.date} ${value.time}`);
         if (bookingDateTime.isBefore(moment())) {
             return res.status(400).json({
@@ -63,6 +48,7 @@ router.post('/', async (req, res) => {
                 serviceType, name, phone, email, notes, status
             ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending')
         `;
+
         const params = [
             value.pickup,
             value.destination,
@@ -76,41 +62,132 @@ router.post('/', async (req, res) => {
             value.notes || null
         ];
 
-        // Insertion en BDD
-        const bookingId = await runQuery(db, query, params);
-        console.log(`✅ Réservation enregistrée avec l'ID: ${bookingId}`);
-
-        // Emails
-        try {
-            if (value.email && value.email.trim() !== '') {
-                console.log(`📧 Envoi email client à ${value.email}`);
-                await sendBookingConfirmation(value, bookingId);
-                console.log('✅ Email client envoyé');
+        db.run(query, params, function(err) {
+            if (err) {
+                console.error('Erreur lors de l\'insertion:', err);
+                return res.status(500).json({
+                    success: false,
+                    message: 'Erreur lors de l\'enregistrement de la réservation'
+                });
             }
-        } catch (emailError) {
-            console.error('❌ Erreur envoi email client:', emailError);
-        }
 
-        try {
-            console.log(`📧 Envoi notification admin à ${process.env.ADMIN_EMAIL}`);
-            await sendBookingNotification(value, bookingId);
-            console.log('✅ Email admin envoyé');
-        } catch (emailError) {
-            console.error('❌ Erreur envoi email admin:', emailError);
-        }
+            const bookingId = this.lastID;
+            
+            // Envoyer les emails de confirmation
+            sendBookingConfirmation(value, bookingId)
+                .catch(err => console.error('Erreur envoi email client:', err));
+            
+            sendBookingNotification(value, bookingId)
+                .catch(err => console.error('Erreur envoi email admin:', err));
 
-        res.status(201).json({
-            success: true,
-            message: 'Réservation enregistrée avec succès',
-            bookingId,
-            emailSent: value.email ? 'Email de confirmation envoyé' : 'Pas d\'email fourni',
-            data: { ...value, id: bookingId, status: 'pending', createdAt: new Date().toISOString() }
+            res.status(201).json({
+                success: true,
+                message: 'Réservation enregistrée avec succès',
+                bookingId: bookingId,
+                data: {
+                    ...value,
+                    id: bookingId,
+                    status: 'pending',
+                    createdAt: new Date().toISOString()
+                }
+            });
         });
 
     } catch (error) {
-        console.error('❌ Erreur lors de la création de la réservation:', error);
-        res.status(500).json({ success: false, message: 'Erreur interne du serveur', error: error.message });
+        console.error('Erreur lors de la création de la réservation:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Erreur interne du serveur'
+        });
     }
+});
+
+// GET - Récupérer une réservation par ID (pour confirmation)
+router.get('/:id', (req, res) => {
+    const bookingId = req.params.id;
+    
+    if (!bookingId || isNaN(bookingId)) {
+        return res.status(400).json({
+            success: false,
+            message: 'ID de réservation invalide'
+        });
+    }
+
+    const db = getDatabase();
+    const query = 'SELECT * FROM bookings WHERE id = ?';
+
+    db.get(query, [bookingId], (err, row) => {
+        if (err) {
+            console.error('Erreur lors de la récupération:', err);
+            return res.status(500).json({
+                success: false,
+                message: 'Erreur lors de la récupération de la réservation'
+            });
+        }
+
+        if (!row) {
+            return res.status(404).json({
+                success: false,
+                message: 'Réservation non trouvée'
+            });
+        }
+
+        // Ne pas exposer les données sensibles
+        const safeBooking = {
+            id: row.id,
+            pickup: row.pickup,
+            destination: row.destination,
+            date: row.date,
+            time: row.time,
+            passengers: row.passengers,
+            serviceType: row.serviceType,
+            status: row.status,
+            createdAt: row.createdAt
+        };
+
+        res.json({
+            success: true,
+            data: safeBooking
+        });
+    });
+});
+
+// GET - Vérifier la disponibilité pour une date/heure
+router.get('/availability/:date/:time', (req, res) => {
+    const { date, time } = req.params;
+    
+    // Validation basique
+    if (!moment(date).isValid() || !time.match(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/)) {
+        return res.status(400).json({
+            success: false,
+            message: 'Date ou heure invalide'
+        });
+    }
+
+    const db = getDatabase();
+    const query = `
+        SELECT COUNT(*) as count 
+        FROM bookings 
+        WHERE date = ? AND time = ? AND status IN ('pending', 'confirmed')
+    `;
+
+    db.get(query, [date, time], (err, row) => {
+        if (err) {
+            console.error('Erreur lors de la vérification:', err);
+            return res.status(500).json({
+                success: false,
+                message: 'Erreur lors de la vérification de disponibilité'
+            });
+        }
+
+        const isAvailable = row.count === 0; // Supposons qu'on ne peut prendre qu'une réservation à la fois
+
+        res.json({
+            success: true,
+            available: isAvailable,
+            message: isAvailable ? 'Créneau disponible' : 'Créneau déjà réservé'
+        });
+    });
 });
 
 module.exports = router;
