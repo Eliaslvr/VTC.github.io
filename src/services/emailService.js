@@ -105,7 +105,7 @@ async function sendBookingConfirmation(bookingData, bookingId) {
         const msg = {
             to: bookingData.email,
             from: {
-                email: process.env.FROM_EMAIL || 'eliaslvr59@gmail.com' ,
+                email: process.env.FROM_EMAIL,
                 name: 'VTC Premium',
             },
             subject: `Confirmation de réservation VTC #${bookingId}`,
@@ -232,11 +232,9 @@ async function sendBookingNotification(bookingData, bookingId) {
 
         await sgMail.send(msg);
         console.log(`✅ Notification admin envoyée à ${adminEmail}`);
-        alert('Réservation validée')
 
     } catch (error) {
         console.error('❌ Erreur envoi notification admin:', error);
-        alert('Réservation refusée')
         
         if (error.response) {
             console.error('Détails de l\'erreur SendGrid:', error.response.body);
