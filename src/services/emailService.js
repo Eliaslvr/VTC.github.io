@@ -105,8 +105,8 @@ async function sendBookingConfirmation(bookingData, bookingId) {
         const msg = {
             to: bookingData.email,
             from: {
-                email: process.env.FROM_EMAIL,
-                name: 'VTC Premium'
+                email: process.env.FROM_EMAIL || 'eliaslvr59@gmail.com' ,
+                name: 'VTC Premium',
             },
             subject: `Confirmation de réservation VTC #${bookingId}`,
             html: emailHtml,
@@ -130,10 +130,10 @@ async function sendBookingConfirmation(bookingData, bookingId) {
 async function sendBookingNotification(bookingData, bookingId) {
     try {
         const adminEmail = process.env.ADMIN_EMAIL;
-        // if (!adminEmail) {
-        //     console.log('Email admin non configuré, notification non envoyée');
-        //     return;
-        // } 
+        if (!adminEmail) {
+            console.log('Email admin non configuré, notification non envoyée');
+            return;
+        } 
 
         const serviceTypes = {
             'standard': 'Standard',
@@ -223,7 +223,7 @@ async function sendBookingNotification(bookingData, bookingId) {
         const msg = {
             to: adminEmail,
             from: {
-                email: process.env.FROM_EMAIL,
+                email: process.env.FROM_EMAIL || 'eliaslvr59@gmail.com',
                 name: 'Système VTC'
             },
             subject: `🚨 Nouvelle réservation #${bookingId} - ${bookingData.name}`,
@@ -232,9 +232,11 @@ async function sendBookingNotification(bookingData, bookingId) {
 
         await sgMail.send(msg);
         console.log(`✅ Notification admin envoyée à ${adminEmail}`);
+        alert('Réservation validée')
 
     } catch (error) {
         console.error('❌ Erreur envoi notification admin:', error);
+        alert('Réservation refusée')
         
         if (error.response) {
             console.error('Détails de l\'erreur SendGrid:', error.response.body);
