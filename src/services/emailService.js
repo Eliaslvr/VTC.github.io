@@ -186,10 +186,6 @@ async function sendBookingNotification(bookingData, bookingId) {
                                 <td style="padding: 5px 0; font-weight: bold;">Passagers :</td>
                                 <td style="padding: 5px 0;">${bookingData.passengers}</td>
                             </tr>
-                            <tr>
-                                <td style="padding: 5px 0; font-weight: bold;">Service :</td>
-                                <td style="padding: 5px 0;">${serviceTypes[bookingData.serviceType]}</td>
-                            </tr>
                         </table>
                     </div>
                     
