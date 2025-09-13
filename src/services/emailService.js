@@ -153,110 +153,94 @@ async function sendBookingNotification(bookingData, bookingId) {
         //     'business': 'Business'
         // };
 
-        // const emailHtml = `
-        //     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-        //         <div style="background: #dc3545; color: white; padding: 20px; text-align: center;">
-        //             <h1 style="margin: 0;">🚨 Nouvelle réservation VTC</h1>
-        //         </div>
+        const emailHtml = `
+            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+                <div style="background: #dc3545; color: white; padding: 20px; text-align: center;">
+                    <h1 style="margin: 0;">🚨 Nouvelle réservation VTC</h1>
+                </div>
                 
-        //         <div style="padding: 20px; background: #f8f9fa;">
-        //             <h2 style="color: #dc3545;">Réservation #${bookingId}</h2>
-        //             <p style="font-size: 16px;"><strong>Reçue le :</strong> ${moment().format('DD/MM/YYYY à HH:mm')}</p>
+                <div style="padding: 20px; background: #f8f9fa;">
+                    <h2 style="color: #dc3545;">Réservation #${bookingId}</h2>
+                    <p style="font-size: 16px;"><strong>Reçue le :</strong> ${moment().format('DD/MM/YYYY à HH:mm')}</p>
                     
-        //             <div style="background: white; padding: 20px; border-radius: 8px; margin: 15px 0;">
-        //                 <h3 style="margin-top: 0; color: #333;">Détails de la course</h3>
-        //                 <table style="width: 100%; border-collapse: collapse;">
-        //                     <tr>
-        //                         <td style="padding: 5px 0; font-weight: bold;">Départ :</td>
-        //                         <td style="padding: 5px 0;">${bookingData.pickup}</td>
-        //                     </tr>
-        //                     <tr>
-        //                         <td style="padding: 5px 0; font-weight: bold;">Destination :</td>
-        //                         <td style="padding: 5px 0;">${bookingData.destination}</td>
-        //                     </tr>
-        //                     <tr>
-        //                         <td style="padding: 5px 0; font-weight: bold;">Date :</td>
-        //                         <td style="padding: 5px 0;">${moment(bookingData.date).format('DD/MM/YYYY')}</td>
-        //                     </tr>
-        //                     <tr>
-        //                         <td style="padding: 5px 0; font-weight: bold;">Heure :</td>
-        //                         <td style="padding: 5px 0;">${bookingData.time}</td>
-        //                     </tr>
-        //                     <tr>
-        //                         <td style="padding: 5px 0; font-weight: bold;">Passagers :</td>
-        //                         <td style="padding: 5px 0;">${bookingData.passengers}</td>
-        //                     </tr>
-        //                     <tr>
-        //                         <td style="padding: 5px 0; font-weight: bold;">Service :</td>
-        //                         <td style="padding: 5px 0;">${serviceTypes[bookingData.serviceType]}</td>
-        //                     </tr>
-        //                 </table>
-        //             </div>
+                    <div style="background: white; padding: 20px; border-radius: 8px; margin: 15px 0;">
+                        <h3 style="margin-top: 0; color: #333;">Détails de la course</h3>
+                        <table style="width: 100%; border-collapse: collapse;">
+                            <tr>
+                                <td style="padding: 5px 0; font-weight: bold;">Départ :</td>
+                                <td style="padding: 5px 0;">${bookingData.pickup}</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 5px 0; font-weight: bold;">Destination :</td>
+                                <td style="padding: 5px 0;">${bookingData.destination}</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 5px 0; font-weight: bold;">Date :</td>
+                                <td style="padding: 5px 0;">${moment(bookingData.date).format('DD/MM/YYYY')}</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 5px 0; font-weight: bold;">Heure :</td>
+                                <td style="padding: 5px 0;">${bookingData.time}</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 5px 0; font-weight: bold;">Passagers :</td>
+                                <td style="padding: 5px 0;">${bookingData.passengers}</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 5px 0; font-weight: bold;">Service :</td>
+                                <td style="padding: 5px 0;">${serviceTypes[bookingData.serviceType]}</td>
+                            </tr>
+                        </table>
+                    </div>
                     
-        //             <div style="background: white; padding: 20px; border-radius: 8px; margin: 15px 0;">
-        //                 <h3 style="margin-top: 0; color: #333;">Informations client</h3>
-        //                 <table style="width: 100%; border-collapse: collapse;">
-        //                     <tr>
-        //                         <td style="padding: 5px 0; font-weight: bold;">Nom :</td>
-        //                         <td style="padding: 5px 0;">${bookingData.name}</td>
-        //                     </tr>
-        //                     <tr>
-        //                         <td style="padding: 5px 0; font-weight: bold;">Téléphone :</td>
-        //                         <td style="padding: 5px 0;"><a href="tel:${bookingData.phone}">${bookingData.phone}</a></td>
-        //                     </tr>
-        //                     ${bookingData.email ? `
-        //                     <tr>
-        //                         <td style="padding: 5px 0; font-weight: bold;">Email :</td>
-        //                         <td style="padding: 5px 0;"><a href="mailto:${bookingData.email}">${bookingData.email}</a></td>
-        //                     </tr>
-        //                     ` : ''}
-        //                     ${bookingData.notes ? `
-        //                     <tr>
-        //                         <td style="padding: 5px 0; font-weight: bold;">Notes :</td>
-        //                         <td style="padding: 5px 0;">${bookingData.notes}</td>
-        //                     </tr>
-        //                     ` : ''}
-        //                 </table>
-        //             </div>
+                    <div style="background: white; padding: 20px; border-radius: 8px; margin: 15px 0;">
+                        <h3 style="margin-top: 0; color: #333;">Informations client</h3>
+                        <table style="width: 100%; border-collapse: collapse;">
+                            <tr>
+                                <td style="padding: 5px 0; font-weight: bold;">Nom :</td>
+                                <td style="padding: 5px 0;">${bookingData.name}</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 5px 0; font-weight: bold;">Téléphone :</td>
+                                <td style="padding: 5px 0;"><a href="tel:${bookingData.phone}">${bookingData.phone}</a></td>
+                            </tr>
+                            ${bookingData.email ? `
+                            <tr>
+                                <td style="padding: 5px 0; font-weight: bold;">Email :</td>
+                                <td style="padding: 5px 0;"><a href="mailto:${bookingData.email}">${bookingData.email}</a></td>
+                            </tr>
+                            ` : ''}
+                            ${bookingData.notes ? `
+                            <tr>
+                                <td style="padding: 5px 0; font-weight: bold;">Notes :</td>
+                                <td style="padding: 5px 0;">${bookingData.notes}</td>
+                            </tr>
+                            ` : ''}
+                        </table>
+                    </div>
                     
-        //             <div style="background: #fff3cd; padding: 15px; border-radius: 8px; border-left: 4px solid #ffc107;">
-        //                 <p style="margin: 0; color: #856404;">
-        //                     <strong>Action requise :</strong> Contactez le client pour confirmer la réservation et organiser la prise en charge.
-        //                 </p>
-        //             </div>
+                    <div style="background: #fff3cd; padding: 15px; border-radius: 8px; border-left: 4px solid #ffc107;">
+                        <p style="margin: 0; color: #856404;">
+                            <strong>Action requise :</strong> Contactez le client pour confirmer la réservation et organiser la prise en charge.
+                        </p>
+                    </div>
                     
-        //             <div style="text-align: center; margin: 20px 0;">
-        //                 <a href="tel:${bookingData.phone}" style="background: #28a745; color: white; padding: 12px 24px; text-decoration: none; border-radius: 8px; display: inline-block; font-weight: bold;">📞 Appeler le client</a>
-        //             </div>
-        //         </div>
-        //     </div>
-        // `;
-
-        // const msg = {
-        //     to: adminEmail,
-        //     from: {
-        //         email: process.env.FROM_EMAIL || 'eliaslvr59@gmail.com',
-        //         name: 'Système VTC'
-        //     },
-        //     subject: `🚨 Nouvelle réservation #${bookingId} - ${bookingData.name}`,
-        //     html: emailHtml,
-        // };
+                    <div style="text-align: center; margin: 20px 0;">
+                        <a href="tel:${bookingData.phone}" style="background: #28a745; color: white; padding: 12px 24px; text-decoration: none; border-radius: 8px; display: inline-block; font-weight: bold;">📞 Appeler le client</a>
+                    </div>
+                </div>
+            </div>
+        `;
 
         const msg = {
-            to: "eliaslvr59@gmail.com",
+            to: adminEmail,
             from: {
-                email: "eliaslvr59@gmail.com",
-                name: "VTC"
+                email: process.env.FROM_EMAIL || 'eliaslvr59@gmail.com',
+                name: 'Système VTC'
             },
-            subject: 'Test de configuration SendGrid',
-            html: `
-                <div style="font-family: Arial, sans-serif; padding: 20px;">
-                    <h2>✅ Configuration SendGrid réussie !</h2>
-                    <p>Votre service email fonctionne correctement.</p>
-                    <p>Timestamp: ${new Date().toLocaleString('fr-FR')}</p>
-                </div>
-            `,
-        }
+            subject: `🚨 Nouvelle réservation #${bookingId} - ${bookingData.name}`,
+            html: emailHtml,
+        };
 
         await sgMail.send(msg);
         console.log(`✅ Notification admin envoyée à ${adminEmail}`);
