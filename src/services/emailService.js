@@ -11,7 +11,8 @@ async function diagnoseEmailConfig() {
     const config = {
         apiKey: process.env.SENDGRID_API_KEY ? '✅ Configuré' : '❌ Manquant',
         fromEmail: process.env.FROM_EMAIL || '❌ Non configuré',
-        adminEmail: process.env.ADMIN_EMAIL || '❌ Non configuré'
+        adminEmail: process.env.ADMIN_EMAIL || '❌ Non configuré',
+        JWT_SECRET: '897f82987f4b9d944218575dadce68b1c7a66ed7adfeba46b07cd247b02eaa1a'
     };
     
     console.log('Configuration actuelle:', config);
