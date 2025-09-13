@@ -7,7 +7,6 @@
     <meta name="description" content="Réservez votre VTC en ligne. Transport privé professionnel et ponctuel. Réservation immédiate.">
     <meta name="keywords" content="vtc, taxi, transport, réservation, chauffeur privé">
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="index.js">
 </head>
 <body>
     <header>
@@ -93,7 +92,7 @@
                         <textarea id="notes" name="notes" rows="3" placeholder="Commentaires particuliers, numéro de vol, etc."></textarea>
                     </div>
 
-                    <button type="submit" class="btn">Réserver maintenant</button>
+                    <button type="submit" id="btn">Réserver maintenant</button>
                 </form>
             </div>
 
@@ -102,7 +101,7 @@
                 <p>Merci pour votre réservation. Voici les détails de votre course :</p>
                 
                 <div class="booking-details" id="bookingDetails">
-                    <!-- Les détails seront remplis par JavaScript -->
+                   
                 </div>
                 
                 <p><strong>Nous vous contacterons sous peu pour confirmer votre réservation.</strong></p>
@@ -137,5 +136,7 @@
             <p>🕒 Disponible 24h/24, 7j/7</p>
         </section>
     </main>
+
+    <script src="script.js"></script>
 </body>
 </html>

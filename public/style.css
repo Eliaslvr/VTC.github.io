@@ -124,7 +124,7 @@ input:focus, select:focus, textarea:focus {
     gap: 1rem;
 }
 
-.btn {
+#btn {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
     padding: 15px 30px;
@@ -137,7 +137,7 @@ input:focus, select:focus, textarea:focus {
     width: 100%;
 }
 
-.btn:hover {
+#btn:hover {
     transform: translateY(-2px);
     box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
 }
@@ -194,7 +194,7 @@ input:focus, select:focus, textarea:focus {
     margin-bottom: 1rem;
 }
 
-.booking-details {
+.bloc {
     background: #f8f9fa;
     padding: 1.5rem;
     border-radius: 10px;
